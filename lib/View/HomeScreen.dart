@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../ViewModel/BusinessViewModel.dart';
 import 'BusinessDetails.dart';
+import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,11 +15,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final BusinessViewModel _businessViewModel = BusinessViewModel();
+  final controller = Get.put(BusinessViewModel());
+
 
   @override
   void initState() {
-    _businessViewModel.sendGetRequest(data: "NYC");
+    controller.sendGetRequest(data: "NYC");
+
     setState(() {
 
     });
@@ -44,11 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: TextField(
-                  controller: _businessViewModel.search,
+                  controller: controller.search,
                   onChanged: (value){
 
-                    _businessViewModel.search.text = value;
-                    _businessViewModel.sendGetRequest(data: _businessViewModel.search.text.toString());
+                    controller.search.text = value;
+                    controller.sendGetRequest(data: controller.search.text.toString());
                     setState(() {
 
                     });
@@ -58,8 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     prefixIcon: Icon(Icons.search),
                     suffixIcon: InkWell(
                       onTap: (){
-                        _businessViewModel.search.clear();
-                         _businessViewModel.sendGetRequest(data: _businessViewModel.search.text.toString());
+                        controller.search.clear();
+                        controller.sendGetRequest(data: controller.search.text.toString());
                          setState(() {
 
 
@@ -81,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
 
-              _businessViewModel.businessesList.isEmpty ?
+              Obx(() => controller.businessesList.isEmpty ?
                   Center(
                     child: Container(
                       child: Text("No Data Found"),
@@ -93,13 +98,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: MediaQuery.of(context).size.height * 0.77,
                   child: ListView.separated(
                     shrinkWrap: true,
-                    itemCount: _businessViewModel.businessesList.length,
+                    itemCount: controller.businessesList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: InkWell(
                           onTap: (){
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => BusinessDetails(_businessViewModel.businessesList[index])));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => BusinessDetails(controller.businessesList[index])));
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -115,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ]),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(_businessViewModel
+                              child: Text(controller
                                   .businessesList[index].name
                                   .toString()),
                             ),
@@ -130,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ),
-              ),
+              ),)
             ],
           ),
         ),

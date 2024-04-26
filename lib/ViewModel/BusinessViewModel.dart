@@ -1,22 +1,23 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get/state_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 import '../Model/BusinessesModel.dart';
 
 
-class BusinessViewModel extends ChangeNotifier {
+class BusinessViewModel extends GetxController {
 
 
   TextEditingController search = TextEditingController();
-  List<Business> businessesList = <Business>[];
+  RxList<Business> businessesList = <Business>[].obs;
 
 
 
   Future<void> sendGetRequest({String? data}) async {
-    notifyListeners();
     Response response = await http.get(Uri.parse("https://api.yelp.com/v3/businesses/search?location=${data.toString()}",),
         headers: {
       "Content-Type": "application/json",
@@ -29,17 +30,14 @@ class BusinessViewModel extends ChangeNotifier {
 
       // var businesses = responseBody['businesses'];
       BusinessesModel business = BusinessesModel.fromJson(responseBody);
-      businessesList = business.businesses!;
-      print(businessesList[0].displayPhone);
-      notifyListeners();
+      businessesList.value = business.businesses!;
+      update();
 
 
     } else {
       businessesList.clear();
-      notifyListeners();
-
+      update();
     }
-    notifyListeners();
   }
 
 
