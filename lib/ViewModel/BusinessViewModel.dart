@@ -16,6 +16,7 @@ class BusinessViewModel extends ChangeNotifier {
 
 
   Future<void> sendGetRequest({String? data}) async {
+    notifyListeners();
     Response response = await http.get(Uri.parse("https://api.yelp.com/v3/businesses/search?location=${data.toString()}",),
         headers: {
       "Content-Type": "application/json",
@@ -29,6 +30,7 @@ class BusinessViewModel extends ChangeNotifier {
       // var businesses = responseBody['businesses'];
       BusinessesModel business = BusinessesModel.fromJson(responseBody);
       businessesList = business.businesses!;
+      print(businessesList[0].displayPhone);
       notifyListeners();
 
 
@@ -37,6 +39,7 @@ class BusinessViewModel extends ChangeNotifier {
       notifyListeners();
 
     }
+    notifyListeners();
   }
 
 
