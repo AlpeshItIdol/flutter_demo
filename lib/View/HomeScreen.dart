@@ -17,6 +17,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     _businessViewModel.sendGetRequest(data: "NYC");
+    setState(() {
+
+    });
     super.initState();
   }
 
@@ -46,6 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     _businessViewModel.search.text = value;
                     _businessViewModel.sendGetRequest(data: _businessViewModel.search.text.toString());
+                    setState(() {
+
+                    });
                   },
                   decoration: InputDecoration(
                     hintText: "Search",
@@ -54,6 +60,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: (){
                         _businessViewModel.search.clear();
                          _businessViewModel.sendGetRequest(data: _businessViewModel.search.text.toString());
+                         setState(() {
+
+
+                         });
 
                       },
                         child: Icon(Icons.cancel)),
